@@ -8,7 +8,7 @@ import { environment } from '../environments/environment';
   providedIn: 'root'
 })
 export class FeedService {
-  private baseUrl = `${environment.apiBaseUrl}/feeds`; // ✅ هنا تم تعديل المسار
+  private baseUrl = `${environment.apiBaseUrl}/feeds`; // ✅ رابط API الرئيسي
 
   constructor(private http: HttpClient) {}
 

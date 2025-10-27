@@ -1,104 +1,91 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NewsService } from '../../../../Services/news.service';
+import { FeedService } from '../../../../Services/feed.service';
+
+interface FeedMapped {
+  id: number;
+  title: string;
+  description: string;
+  author?: string;
+  category?: string;
+  publishedAt?: string;
+  imageUrl: string;
+  link?: string;
+}
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [RouterModule, CommonModule, HttpClientModule],
+  imports: [RouterModule, CommonModule],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent implements OnInit {
-  sections: any[] = [];
-  allArticles: any[] = []; // 👈 نجمع كل المقالات هنا
   loading = true;
-
-  feeds = [
-    { category: 'World', url: 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml' },
-    { category: 'Middle East', url: 'https://rss.nytimes.com/services/xml/rss/nyt/MiddleEast.xml' },
-    { category: 'Europe', url: 'https://rss.nytimes.com/services/xml/rss/nyt/Europe.xml' },
-    { category: 'Asia Pacific', url: 'https://rss.nytimes.com/services/xml/rss/nyt/AsiaPacific.xml' },
-    { category: 'Americas', url: 'https://rss.nytimes.com/services/xml/rss/nyt/Americas.xml' },
-    { category: 'Africa', url: 'https://rss.nytimes.com/services/xml/rss/nyt/Africa.xml' },
-  ];
+  sections: { category: string; posts: FeedMapped[] }[] = [];
+  allArticles: FeedMapped[] = [];
 
   constructor(
-    private http: HttpClient,
     private router: Router,
-    private newsService: NewsService
+    private feedService: FeedService
   ) {}
 
   ngOnInit(): void {
-    this.loadAllFeeds();
+    this.loadFeedsFromBackend();
   }
 
-  loadAllFeeds(): void {
-    let loaded = 0;
-
-    this.feeds.forEach(feed => {
-      this.http.get(feed.url, { responseType: 'text' }).subscribe({
-        next: (data) => {
-          const parser = new DOMParser();
-          const xml = parser.parseFromString(data, 'text/xml');
-          const items = Array.from(xml.querySelectorAll('item')).slice(0, 10);
-
-          const posts = items
-            .map((item: any, index: number) => {
-              const mediaContent = item.getElementsByTagName('media:content')[0];
-              const enclosure = item.getElementsByTagName('enclosure')[0];
-
-              let imageUrl = '';
-              if (mediaContent && mediaContent.getAttribute('url')) {
-                imageUrl = mediaContent.getAttribute('url');
-              } else if (enclosure && enclosure.getAttribute('url')) {
-                imageUrl = enclosure.getAttribute('url');
-              }
-
-              return {
-                id: `${feed.category}-${index}`,
-                category: feed.category,
-                title: item.querySelector('title')?.textContent?.trim() || '',
-                description: item.querySelector('description')?.textContent?.replace(/<[^>]*>?/gm, '') || '',
-                link: item.querySelector('link')?.textContent?.trim() || '#',
-                imageUrl: imageUrl,
-                pubDate: item.querySelector('pubDate')?.textContent || ''
-              };
-            })
-            .filter(post => post.imageUrl && post.imageUrl.trim() !== '')
-            .slice(0, 3);
-
-          // نحطها في كل سكشن
-          this.sections.push({
-            category: feed.category,
-            posts: posts
-          });
-
-          // 👇 كمان نحطها في المصفوفة الكبيرة
-          this.allArticles.push(...posts);
-
-          loaded++;
-          if (loaded === this.feeds.length) {
-            this.newsService.setAllArticles(this.allArticles); // نحفظ كل الأخبار في الخدمة
-            this.loading = false;
-          }
-        },
-        error: (err) => {
-          console.error(`Error loading ${feed.category}:`, err);
-          loaded++;
-          if (loaded === this.feeds.length) {
-            this.newsService.setAllArticles(this.allArticles);
-            this.loading = false;
-          }
+  /** ✅ Load Feeds from backend with image filter */
+  loadFeedsFromBackend(): void {
+    this.feedService.getAllFeeds().subscribe({
+      next: (res: any[]) => {
+        if (!res || res.length === 0) {
+          this.loading = false;
+          return;
         }
-      });
+
+        // 🩵 Map backend fields to frontend fields
+        const mapped: FeedMapped[] = res
+          .map((feed: any) => ({
+            id: feed.Id,
+            title: feed.Title,
+            description: feed.Summary || feed.Content,
+            author: feed.Author,
+            category: feed.Category,
+            publishedAt: feed.PublishedAt,
+            imageUrl: feed.ImageUrl,
+            link: feed.Link
+          }))
+          // ❌ Remove feeds without image
+          .filter(f => f.imageUrl && f.imageUrl.trim() !== '');
+
+        // ⬅️ Group feeds by category
+        const grouped = mapped.reduce((acc: { [key: string]: FeedMapped[] }, feed: FeedMapped) => {
+          const cat = feed.category || 'Other';
+          if (!acc[cat]) acc[cat] = [];
+          acc[cat].push(feed);
+          return acc;
+        }, {});
+
+        // ⬅️ Convert grouped data into array for display
+        this.sections = Object.keys(grouped).map(cat => ({
+          category: cat,
+          posts: grouped[cat].slice(0, 3) // 3 news per category
+        }));
+
+        this.allArticles = mapped;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('❌ Error loading feeds:', err);
+        this.loading = false;
+      }
     });
   }
 
-  openNews(article: any) {
-    this.newsService.setArticle(article);
-    this.router.navigate(['/news-details']);
+  /** ✅ Navigate to FeedDetailsComponent */
+  openNews(feed: FeedMapped) {
+    if (!feed || !feed.id) return;
+    this.router.navigate(['/feeds', feed.id]);
   }
 }

@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { AboutPageComponent } from './components/Pages/clieant-feeds/about-page/about-page.component';
-import { NewsDetailsComponent } from './components/Pages/news-details/news-details.component';
 import { DashboardComponent } from './components/Pages/Admin-feeds/dashboard/dashboard.component';
 import { LoginComponent } from './components/Auth/login/login.component';
 import { SignupComponent } from './components/Auth/signup/signup.component';
@@ -22,7 +21,6 @@ export const routes: Routes = [
       { path: 'home', component: HomePageComponent },
       { path: 'about', component: AboutPageComponent },
       { path: 'ForgotPassword', component: ForgotPasswordComponent },
-      { path: 'news-details', component: NewsDetailsComponent },
 
 
       { path: 'Login', component: LoginComponent },
