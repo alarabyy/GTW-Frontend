@@ -1,0 +1,50 @@
+<div class="auth-container fade-in">
+  <div class="auth-card">
+    <h2 class="auth-title">Create Account ✨</h2>
+    <p class="auth-subtitle">Join us and explore the future</p>
+
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <input type="text" placeholder="Full Name" formControlName="name" />
+        <div class="error" *ngIf="name?.touched && name?.invalid">
+          <small *ngIf="name?.errors?.['required']">Name is required.</small>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <input type="email" placeholder="Email" formControlName="email" />
+        <div class="error" *ngIf="email?.touched && email?.invalid">
+          <small *ngIf="email?.errors?.['required']">Email is required.</small>
+          <small *ngIf="email?.errors?.['email']">Enter a valid email.</small>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <input type="password" placeholder="Password" formControlName="password" />
+        <div class="error" *ngIf="password?.touched && password?.invalid">
+          <small *ngIf="password?.errors?.['required']">Password is required.</small>
+          <small *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters.</small>
+        </div>
+      </div>
+
+      <div class="input-group" style="display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="remember" formControlName="rememberMe" />
+        <label for="remember">Remember me</label>
+      </div>
+
+      <button type="submit" class="btn" [disabled]="loading">
+        <span *ngIf="!loading">Sign Up</span>
+        <span *ngIf="loading">Signing up...</span>
+      </button>
+
+      <div class="server-error" *ngIf="serverError" style="color:#e11d48;margin-top:10px;">
+        {{ serverError }}
+      </div>
+    </form>
+
+    <p class="footer-text">
+      Already have an account?
+      <a routerLink="/login">Login</a>
+    </p>
+  </div>
+</div>

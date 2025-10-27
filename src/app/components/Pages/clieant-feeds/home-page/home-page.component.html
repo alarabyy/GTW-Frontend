@@ -1,0 +1,28 @@
+<div class="home-container">
+  <div *ngIf="loading" class="loading-section">
+    <div class="spinner"></div>
+    <p>Loading latest world news...</p>
+  </div>
+
+  <div *ngIf="!loading">
+    <section class="hero-section">
+      <h1>🌍 Global Truth Watch</h1>
+      <p>Stay informed with the latest trusted news from around the world</p>
+    </section>
+
+    <div *ngFor="let section of sections" class="latest-news mb-5">
+      <h2>{{ section.category }}</h2>
+      <div class="news-grid">
+        <div *ngFor="let post of section.posts" class="news-card" (click)="openNews(post)">
+          <div class="card-image">
+            <img [src]="post.imageUrl" alt="{{ post.title }}">
+          </div>
+          <div class="card-content">
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

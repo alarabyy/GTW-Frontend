@@ -1,0 +1,98 @@
+<div class="container py-5 fade-in">
+  <div class="card shadow-lg border-0 rounded-4 p-4 bg-white mx-auto" style="max-width: 600px;">
+    <h2 class="text-center text-primary fw-bold mb-4">
+      ➕ Add New Feed Source
+    </h2>
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <!-- Name -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Source Name</label>
+        <input
+          formControlName="name"
+          class="form-control form-control-lg"
+          placeholder="Enter feed source name"
+        />
+      </div>
+
+      <!-- URL -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">RSS Feed URL</label>
+        <input
+          formControlName="url"
+          class="form-control form-control-lg"
+          placeholder="Enter RSS feed URL"
+        />
+      </div>
+
+      <!-- Sections -->
+      <div formArrayName="sections" class="mb-3">
+        <label class="form-label fw-semibold">Sections</label>
+
+        <div
+          *ngFor="let section of sections.controls; let i = index"
+          [formGroupName]="i"
+          class="border rounded-3 p-3 mb-2 bg-light"
+        >
+          <div class="row g-2 align-items-center">
+            <div class="col-md-5">
+              <input
+                formControlName="name"
+                class="form-control"
+                placeholder="Section name"
+              />
+            </div>
+            <div class="col-md-5">
+              <input
+                formControlName="slang"
+                class="form-control"
+                placeholder="Section slang"
+              />
+            </div>
+            <div class="col-md-2 text-end">
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm"
+                (click)="removeSection(i)"
+                *ngIf="sections.length > 1"
+              >
+                ✖
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-outline-primary w-100 mt-2"
+          (click)="addSection()"
+        >
+          ➕ Add Another Section
+        </button>
+      </div>
+
+      <!-- Buttons -->
+      <div class="d-flex justify-content-between mt-4">
+        <button
+          class="btn btn-success px-4 py-2 fw-semibold"
+          type="submit"
+          [disabled]="loading"
+        >
+          {{ loading ? 'Saving...' : 'Save Source' }}
+        </button>
+        <a routerLink="/feed-sources" class="btn btn-secondary px-4 py-2">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Animation Style -->
+<style>
+  .fade-in {
+    animation: fadeIn 0.7s ease-in-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

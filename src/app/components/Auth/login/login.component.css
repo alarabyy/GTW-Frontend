@@ -1,0 +1,93 @@
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #b7c0ff, #e0e7ff);
+  font-family: "Poppins", sans-serif;
+}
+
+.auth-card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(120, 130, 255, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  animation: slideUp 0.8s ease;
+}
+
+.auth-title {
+  color: #4c51bf;
+  margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+  color: #6b7280;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  transition: 0.3s;
+  font-size: 1rem;
+}
+
+input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+  outline: none;
+}
+
+.btn {
+  background: linear-gradient(90deg, #6366f1, #7c3aed);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0.9rem;
+  width: 100%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+.footer-text {
+  margin-top: 1rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+a {
+  color: #6366f1;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,28 @@
+<div class="details-container" *ngIf="article">
+  <h1 class="title">{{ article.title }}</h1>
+  <p class="date">{{ article.pubDate | date: 'medium' }}</p>
+
+  <div class="image-wrapper">
+    <img [src]="article.imageUrl" alt="{{ article.title }}">
+  </div>
+
+  <div class="content">
+    <p class="description">{{ article.description }}</p>
+    <p *ngIf="article.content" class="full-content">{{ article.content }}</p>
+  </div>
+
+  <a [href]="article.link" target="_blank" class="source-btn">
+    🌐 Read Original Article
+  </a>
+
+  <div class="nav-buttons">
+    <button class="nav-btn prev" (click)="showPrevious()" [disabled]="currentIndex === 0">
+      ⬅️ Previous
+    </button>
+
+    <button class="nav-btn next" (click)="showNext()" [disabled]="currentIndex === allArticles.length - 1">
+      Next ➡️
+    </button>
+  </div>
+</div>
+b
