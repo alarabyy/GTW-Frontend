@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -9,7 +9,7 @@ import { AuthService } from '../../../Services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -34,26 +34,20 @@ export class LoginComponent {
     }
 
     this.loading = true;
-    const payload = {
-      email: this.loginForm.value.email,
-      password: this.loginForm.value.password,
-      rememberMe: this.loginForm.value.rememberMe
-    };
+    const payload = this.loginForm.value;
 
     this.authService.login(payload)
       .pipe(
         catchError(err => {
-          // تفصيل رسالة خطأ من الـ API
-          this.serverError = err?.error?.message ?? 'Login failed. Check credentials.';
+          this.serverError = err?.error?.message ?? 'Login failed.';
           this.loading = false;
           return of(null);
         })
       )
       .subscribe(res => {
         this.loading = false;
-        if (res && res.token) {
-          // تم الحفظ داخل الـ service
-          this.router.navigate(['/']); // أو لأي راوت تاني
+        if (res?.success) {
+          this.router.navigate(['/']);
         }
       });
   }

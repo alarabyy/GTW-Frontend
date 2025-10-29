@@ -12,6 +12,13 @@ import { FeedSourcesComponent } from './components/Pages/Sources/feed-sources/fe
 import { EditFeedSourceComponent } from './components/Pages/Sources/edit-feed-source/edit-feed-source.component';
 import { AddFeedSourceComponent } from './components/Pages/Sources/add-feed-source/add-feed-source.component';
 import { HomePageComponent } from './components/Pages/clieant-feeds/home-page/home-page.component';
+import { AmericasComponent } from './components/Pages/clieant-feeds/americas/americas.component';
+import { RoleGuard } from './guards/RoleGuard';
+import { AllUserComponent } from './components/Pages/Admin-feeds/all-user/all-user.component';
+import { AsiaComponent } from './components/Pages/clieant-feeds/asia/asia.component';
+import { MiddleEastComponent } from './components/Pages/clieant-feeds/middleeast/middleeast.component';
+import { EuropeComponent } from './components/Pages/clieant-feeds/europe/europe.component';
+import { AfricaComponent } from './components/Pages/clieant-feeds/africa/africa.component';
 
 export const routes: Routes = [
   {
@@ -21,20 +28,24 @@ export const routes: Routes = [
       { path: 'home', component: HomePageComponent },
       { path: 'about', component: AboutPageComponent },
       { path: 'ForgotPassword', component: ForgotPasswordComponent },
-
-
+      { path: 'americas', component: AmericasComponent },
+      { path: 'Asia', component: AsiaComponent },
+      { path: 'middleeast', component: MiddleEastComponent },
+      { path: 'europe', component: EuropeComponent},
+      { path: 'africa', component: AfricaComponent},
+      { path: 'About-US', component: AboutPageComponent },
       { path: 'Login', component: LoginComponent },
       { path: 'SignUp', component: SignupComponent },
-
       { path: '', redirectTo: '/home', pathMatch: 'full' },
-
     ]
   },
-
   {
     path: 'admin',
     component: AdminLayoutComponent,
+    canActivate: [RoleGuard],
+    data: { role: 'Admin' },
     children: [
+      { path: 'All-User', component: AllUserComponent },
       { path: 'DashBoard', component: DashboardComponent },
       { path: 'feeds', component: FeedsComponent },
       { path: 'feeds/:id', component: FeedDetailsComponent },
@@ -44,3 +55,4 @@ export const routes: Routes = [
     ]
   },
 ];
+

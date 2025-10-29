@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../Services/auth.service';
 
 @Component({
   selector: 'app-admin-nav',
@@ -11,6 +12,7 @@ import { RouterModule } from '@angular/router';
 })
 export class AdminNavComponent {
   isSidebarOpen = false;
+  constructor(public authService: AuthService) {} // هنا بنخلي السرفيس متاح في التمبلت
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;

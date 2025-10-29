@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -9,7 +9,7 @@ import { AuthService } from '../../../Services/auth.service';
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule , RouterLink],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
@@ -35,12 +35,7 @@ export class SignupComponent {
     }
 
     this.loading = true;
-    const payload = {
-      name: this.signupForm.value.name,
-      email: this.signupForm.value.email,
-      password: this.signupForm.value.password,
-      rememberMe: this.signupForm.value.rememberMe
-    };
+    const payload = this.signupForm.value;
 
     this.authService.register(payload)
       .pipe(
@@ -52,8 +47,7 @@ export class SignupComponent {
       )
       .subscribe(res => {
         this.loading = false;
-        if (res && res.token) {
-          // تم الحفظ داخل الـ service
+        if (res?.success) {
           this.router.navigate(['/login']);
         }
       });

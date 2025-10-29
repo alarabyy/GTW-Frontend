@@ -1,185 +1,126 @@
-/* Using the same palette variables from the Navbar for consistency */
 :root {
-  --primary-color: #00A896;       /* Teal */
-  --secondary-color: #2C3E50;     /* Deep Charcoal */
-  --background-dark: #1A334E;     /* Dark Navy Blue (Header background) */
-  --footer-bg: #112239;          /* Slightly darker Navy for Footer */
-  --text-light: #F4F4F9;          /* Off-White/Light Gray */
-  --footer-text: #BCC8D4;         /* Soft Gray text */
-  --highlight-color: #00C9B1;     /* Lighter Teal for hover */
+  --primary-bg: #002b66;
+  --secondary-bg: #0b2447;
+  --golden-text: #d4af37;
+  --highlight-color: #ffd700;
   --transition-speed: 0.3s;
 }
 
+/* Footer Container */
 .footer {
-  background-color: var(--footer-bg);
-  color: var(--footer-text);
-  padding: 3.5rem 5%;
-  font-family: 'Inter', sans-serif; /* Use a modern font */
+  background-color: #002b66 ;
+  color:  #ffd700;
+  padding: 4rem 5%;
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+  position: relative;
 }
 
+/* Grid Layout */
 .footer-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
+  gap: 2.5rem;
   max-width: 1300px;
   margin: 0 auto;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 2rem;
-  margin-bottom: 2rem;
+  animation: fadeInUp 1s ease forwards;
 }
 
-.footer-col {
-  /* No margin-bottom needed due to grid gap */
-}
-
-/* Brand Info Styling */
-.brand-info {
-    max-width: 350px;
-}
-
+/* Brand Logo */
 .logo-link {
   display: flex;
   align-items: center;
+  gap: 0.8rem;
   margin-bottom: 1rem;
 }
 
+.logo-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 12px;
+  animation: rotateLogo 6s linear infinite;
+}
+
 .logo-link h3 {
-  color: var(--text-light);
-  font-size: 1.5rem;
-  margin: 0;
+  color: var(--golden-text);
+  font-size: 1.6rem;
   font-weight: 700;
 }
 
-.logo-icon i {
-    font-size: 1.8rem;
-    color: var(--primary-color);
-    margin-left: 0.5rem; /* RTL adjustment for icon placement */
-    margin-right: 0.5rem;
+/* Footer Titles */
+.footer-col h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--golden-text);
+  position: relative;
+  overflow: hidden;
 }
 
+/* Animated underline */
+.footer-col h3::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background-color: var(--highlight-color);
+  border-radius: 2px;
+  margin-top: 4px;
+  animation: slideWidth 2s ease-in-out infinite alternate;
+}
+
+/* Paragraphs */
 .footer-col p {
   font-size: 0.9rem;
   line-height: 1.7;
+  color: #f5d76e;
+  animation: fadeInText 1.5s ease forwards;
 }
 
-.footer-col h3 {
-  color: var(--text-light);
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 1.2rem;
-  position: relative;
-  padding-bottom: 0.3rem;
-}
-
-/* Decorative separator under titles */
-.footer-col h3::after {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 3px;
-    background-color: var(--primary-color);
-    border-radius: 2px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-}
-
-/* --- Links Styling (Quick Links & Categories) --- */
-.footer-col ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-col ul li {
-  margin-bottom: 0.6rem;
-}
-
-.footer-col a {
-  color: var(--footer-text);
-  text-decoration: none;
-  font-size: 0.95rem;
-  transition: color var(--transition-speed), margin-right 0.2s;
-  display: inline-block;
-}
-
-.footer-col a:hover {
-  color: var(--highlight-color);
-  margin-right: 5px; /* Subtle hover animation */
-}
-
-/* --- Social Media Icons --- */
-.social-icons {
-    display: flex;
-    gap: 1rem;
-}
-
-.social-icons a {
-  color: var(--footer-text);
-  font-size: 1.2rem;
-  width: 40px;
-  height: 40px;
-  background-color: rgba(255, 255, 255, 0.05);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  transition: background-color var(--transition-speed), color var(--transition-speed), transform 0.3s;
-}
-
-.social-icons a:hover {
-  color: var(--background-dark); /* Darker background for contrast */
-  background-color: var(--highlight-color);
-  transform: translateY(-3px); /* Pop up effect */
-}
-
-/* --- Footer Bottom --- */
+/* Footer Bottom */
 .footer-bottom {
   text-align: center;
-  padding-top: 0.5rem;
+  margin-top: 3rem;
+  font-size: 0.85rem;
+  color: #f5d76e;
+  animation: fadeIn 2s ease forwards;
 }
 
-.footer-bottom p {
-  margin: 0;
-  font-size: 0.8rem;
-  color: #7A91AE; /* Muted copyright text */
+/* Animations */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Responsive Adjustments --- */
+@keyframes rotateLogo {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes slideWidth {
+  0% { width: 0; }
+  100% { width: 50px; }
+}
+
+@keyframes fadeInText {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .footer {
-    padding: 2.5rem 5%;
-  }
-
   .footer-container {
-    grid-template-columns: 1fr; /* Stack columns vertically on mobile */
+    grid-template-columns: 1fr;
     text-align: center;
-  }
-
-  .footer-col {
-    padding-bottom: 1rem;
-  }
-  
-  /* Center alignment for titles and separators on mobile */
-  .footer-col h3::after {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .brand-info {
-    max-width: 100%;
-    margin: 0;
-  }
-  
-  .social-icons {
-      justify-content: center;
-      margin-top: 1rem;
   }
 
   .logo-link {
     justify-content: center;
-  }
-
-  .footer-col a:hover {
-    margin-right: 0; /* Remove side animation on mobile */
   }
 }

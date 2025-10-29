@@ -5,19 +5,16 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  name?: string; // optional if your API accepts name
+  name?: string;
   email: string;
   password: string;
   rememberMe?: boolean;
 }
 
 export interface AuthResponse {
-  token: string;
-  expiresIn?: number;
-  user?: {
-    id?: string | number;
-    name?: string;
-    email?: string;
-    // أي خصائص إضافية من الـ API
+  success: boolean;
+  content: {
+    token: string;
   };
+  message: string;
 }

@@ -9,8 +9,13 @@ import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth';
 })
 export class AuthService {
   private base = environment.apiBaseUrl;
+  private role: string | null = null;
+  private tokenKey = 'auth_token';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    // عند إنشاء الـ Service، نحاول استرجاع الدور من التوكن إذا موجود
+    this.role = this.getRoleFromToken();
+  }
 
   login(payload: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.base}/auth/login`, payload)
@@ -18,31 +23,62 @@ export class AuthService {
   }
 
   register(payload: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.base}/api/auth/register`, payload)
+    return this.http.post<AuthResponse>(`${this.base}/auth/register`, payload)
       .pipe(tap(res => this.handleAuthSuccess(res, payload.rememberMe ?? false)));
   }
 
   logout() {
-    localStorage.removeItem('auth_token');
-    sessionStorage.removeItem('auth_token');
-    // أي تنظيفات إضافية
+    localStorage.removeItem(this.tokenKey);
+    sessionStorage.removeItem(this.tokenKey);
+    this.role = null;
   }
 
   private handleAuthSuccess(res: AuthResponse, remember: boolean) {
-    if (!res || !res.token) return;
-    // حفظ التوكن في storage بناءً على rememberMe
-    if (remember) {
-      localStorage.setItem('auth_token', res.token);
-    } else {
-      sessionStorage.setItem('auth_token', res.token);
-    }
+    if (!res || !res.content?.token) return;
+
+    const token = res.content.token;
+
+    if (remember) localStorage.setItem(this.tokenKey, token);
+    else sessionStorage.setItem(this.tokenKey, token);
+
+    this.role = this.getRoleFromToken();
   }
 
   getToken(): string | null {
-    return localStorage.getItem('auth_token') ?? sessionStorage.getItem('auth_token');
+    return localStorage.getItem(this.tokenKey) ?? sessionStorage.getItem(this.tokenKey);
   }
 
   isAuthenticated(): boolean {
     return !!this.getToken();
+  }
+
+  getRole(): string | null {
+    if (!this.role) {
+      this.role = this.getRoleFromToken();
+    }
+    return this.role;
+  }
+
+  hasRole(expectedRole: string): boolean {
+    return this.getRole()?.toLowerCase() === expectedRole.toLowerCase();
+  }
+
+  private getRoleFromToken(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log('JWT Payload:', payload);
+
+      // قراءة الدور من أي صيغة موجودة
+      return payload['role']
+          || payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+          || payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/role']
+          || null;
+    } catch (e) {
+      console.error('Failed to decode JWT', e);
+      return null;
+    }
   }
 }

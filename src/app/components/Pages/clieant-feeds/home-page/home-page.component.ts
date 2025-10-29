@@ -3,15 +3,29 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FeedService } from '../../../../Services/feed.service';
 
+interface FeedRaw {
+  Id: number;
+  Title: string;
+  Summary?: string;
+  Content: string;
+  Author?: string;
+  Category?: string;
+  SourceName?: string;
+  Source?: { Title: string };
+  PublishedAt?: string;
+  ImageUrl?: string;
+}
+
 interface FeedMapped {
   id: number;
   title: string;
   description: string;
   author?: string;
   category?: string;
+  sourceName?: string;
   publishedAt?: string;
   imageUrl: string;
-  link?: string;
+  logoUrl?: string;
 }
 
 @Component({
@@ -24,68 +38,74 @@ interface FeedMapped {
 export class HomePageComponent implements OnInit {
   loading = true;
   sections: { category: string; posts: FeedMapped[] }[] = [];
-  allArticles: FeedMapped[] = [];
 
-  constructor(
-    private router: Router,
-    private feedService: FeedService
-  ) {}
+  constructor(private router: Router, private feedService: FeedService) {}
 
   ngOnInit(): void {
     this.loadFeedsFromBackend();
   }
 
-  /** ✅ Load Feeds from backend with image filter */
   loadFeedsFromBackend(): void {
     this.feedService.getAllFeeds().subscribe({
-      next: (res: any[]) => {
-        if (!res || res.length === 0) {
+      next: (res: FeedRaw[]) => {
+        if (!res?.length) {
           this.loading = false;
           return;
         }
-
-        // 🩵 Map backend fields to frontend fields
-        const mapped: FeedMapped[] = res
-          .map((feed: any) => ({
-            id: feed.Id,
-            title: feed.Title,
-            description: feed.Summary || feed.Content,
-            author: feed.Author,
-            category: feed.Category,
-            publishedAt: feed.PublishedAt,
-            imageUrl: feed.ImageUrl,
-            link: feed.Link
-          }))
-          // ❌ Remove feeds without image
-          .filter(f => f.imageUrl && f.imageUrl.trim() !== '');
-
-        // ⬅️ Group feeds by category
-        const grouped = mapped.reduce((acc: { [key: string]: FeedMapped[] }, feed: FeedMapped) => {
-          const cat = feed.category || 'Other';
-          if (!acc[cat]) acc[cat] = [];
-          acc[cat].push(feed);
-          return acc;
-        }, {});
-
-        // ⬅️ Convert grouped data into array for display
-        this.sections = Object.keys(grouped).map(cat => ({
-          category: cat,
-          posts: grouped[cat].slice(0, 3) // 3 news per category
-        }));
-
-        this.allArticles = mapped;
+        this.processFeeds(res);
         this.loading = false;
       },
-      error: (err) => {
+      error: err => {
         console.error('❌ Error loading feeds:', err);
         this.loading = false;
       }
     });
   }
 
-  /** ✅ Navigate to FeedDetailsComponent */
+  private processFeeds(res: FeedRaw[]): void {
+    const mapped: FeedMapped[] = res
+      .map(feed => ({
+        id: feed.Id,
+        title: feed.Title,
+        description: feed.Summary || feed.Content,
+        author: feed.Author,
+        category: feed.Category,
+        sourceName: feed.SourceName || feed.Source?.Title || 'Unknown',
+        publishedAt: feed.PublishedAt,
+        imageUrl: feed.ImageUrl || '',
+        logoUrl: this.getSourceLogo(feed.SourceName)
+      }))
+      .filter(f => f.imageUrl?.trim() !== '');
+
+    const grouped = mapped.reduce((acc: { [key: string]: FeedMapped[] }, feed) => {
+      const cat = feed.category || 'General';
+      if (!acc[cat]) acc[cat] = [];
+      acc[cat].push(feed);
+      return acc;
+    }, {});
+
+    this.sections = Object.keys(grouped).map(cat => ({
+      category: cat,
+      posts: grouped[cat].slice(0, 3)
+    }));
+  }
+
+  getSourceLogo(source?: string): string {
+    if (!source) return '/assets/logos/default-news.png';
+    const name = source.toLowerCase();
+    if (name.includes('bbc')) return '/assets/logos/bbc.png';
+    if (name.includes('cnn')) return '/assets/logos/cnn.png';
+    if (name.includes('aljazeera')) return '/assets/logos/aljazeera.png';
+    if (name.includes('reuters')) return '/assets/logos/reuters.png';
+    return '/assets/logos/default-news.png';
+  }
+
   openNews(feed: FeedMapped) {
-    if (!feed || !feed.id) return;
     this.router.navigate(['/feeds', feed.id]);
   }
+scrollToNews() {
+  const element = document.getElementById('news-section');
+  element?.scrollIntoView({ behavior: 'smooth' });
+}
+
 }
