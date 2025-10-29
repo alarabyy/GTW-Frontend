@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../Services/auth.service';
+import { UserService, User } from '../../../Services/user.service';
 
 @Component({
   selector: 'app-global-nav',
@@ -10,10 +11,45 @@ import { AuthService } from '../../../Services/auth.service';
   templateUrl: './global-nav.component.html',
   styleUrls: ['./global-nav.component.css']
 })
-export class GlobalNavComponent {
+export class GlobalNavComponent implements OnInit {
   isSidebarOpen = false;
+  user: User | null = null;
 
-  constructor(public authService: AuthService) {} // هنا بنخلي السرفيس متاح في التمبلت
+  constructor(
+    public authService: AuthService,
+    private userService: UserService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated()) {
+      this.loadUserProfile();
+    }
+  }
+
+  loadUserProfile() {
+    const token = this.authService.getToken();
+    if (!token) return;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const userId =
+        payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ||
+        payload['nameid'] ||
+        payload['id'];
+
+      if (userId) {
+        this.userService.getUserById(userId).subscribe({
+          next: (res: any) => {
+            this.user = res?.content ?? res;
+          },
+          error: (err) => console.error('Error loading user', err),
+        });
+      }
+    } catch (e) {
+      console.error('Invalid token structure', e);
+    }
+  }
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -25,7 +61,10 @@ export class GlobalNavComponent {
 
   logout() {
     this.authService.logout();
-    // بعد اللوج اوت ممكن تعمل إعادة توجيه للصفحة الرئيسية
-    window.location.href = '/home';
+    this.router.navigate(['/home']);
+  }
+
+  goToProfile() {
+    this.router.navigate(['/myprofile']);
   }
 }

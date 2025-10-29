@@ -1,262 +1,115 @@
-/* ============================ */
-/* 0. تعريف الألوان الأساسية */
-/* ============================ */
 :root {
-  --primary-bg: #002b66;        /* أزرق غامق للخلفية */
-  --golden-text: #d4af37;       /* ذهبي للنصوص والأزرار */
-  --hover-bg: #003b8e;          /* أزرق أفتح للـ Hover */
-  --active-bg: #001f4d;         /* أزرق أغمق للنشط */
+  --primary-bg: #0b2447;
+  --golden-text: #d4af37;
+  --hover-bg: #003b8e;
+  --active-bg: #001f4d;
   --transition-speed: 0.3s;
 }
 
-/* ============================ */
-/* 1. تنسيق الـ Navbar الأساسي */
-/* ============================ */
-.navbar {
-  background-color:  #0b2447 !important;
-  box-shadow: 0 4px 20px rgba(0, 43, 102, 0.8);
-  min-height: 70px;
-  padding: 0.8rem 0;
-  color: #c19b2e;
+/* الشريط العلوي */
+.top-nav {
+  background-color: #0b2447 !important;
+  box-shadow: 0 3px 12px rgba(0, 43, 102, 0.8);
+  padding: 0.4rem 0;
+  z-index: 1030;
 }
 
-/* ============================ */
-/* 2. اسم الموقع (Brand) */
-/* ============================ */
-.navbar-brand {
-  color: var(--golden-text) !important;
-  font-weight: bold;
-  font-size: 1.2rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: all var(--transition-speed);
+/* الشريط السفلي */
+.bottom-nav {
+  background-color: #0b2447 !important;
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 0.35rem 0;
+  margin-top: 56px;
+  z-index: 1029;
+  position: sticky;
+  top: 56px;
 }
 
-.navbar-brand:hover {
-  color: #f5d76e !important;
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-}
-
-/* ============================ */
-/* 3. روابط الـ Navigation */
-/* ============================ */
+/* روابط */
 .nav-link {
-  color: var(--golden-text) !important;
+  color: #d4af37 ;
   font-weight: 500;
-  padding: 0.6rem 1.2rem !important;
-  margin: 0 0.2rem;
+  padding: 0.45rem 1rem !important;
   border-radius: 8px;
   transition: all var(--transition-speed);
-  position: relative;
-  background-color: transparent;
 }
-
-/* ============================ */
-/* 4. تأثيرات الـ Hover والـ Active */
-/* ============================ */
-.nav-link:hover {
-  background-color: var(--hover-bg) !important;
-  color: #fff !important;
+.navbar-brand{
+  color: #d4af37;
+}
+/* Hover و Active */
+.nav-link:hover,
+.nav-link.active-hover,
+.nav-link.active {
+  background-color: var(--golden-text) !important;
+  color: wheat !important;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
 }
 
-.nav-link.active {
-  background-color: var(--active-bg) !important;
-  color: var(--golden-text) !important;
+/* أيقونة البروفايل */
+.profile-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-weight: 600;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
 }
 
-.nav-link:focus {
-  background-color: var(--active-bg) !important;
-  color: var(--golden-text) !important;
-  outline: 2px solid var(--golden-text);
-  outline-offset: 2px;
+.profile-img {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--golden-text);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* ============================ */
-/* 5. زر القائمة في الموبايل */
-/* ============================ */
-.navbar-toggler {
-  border-color: var(--golden-text) !important;
-  background-color: transparent;
-  padding: 0.5rem 0.75rem;
-  cursor: pointer;
+.profile-link:hover .profile-img {
+  transform: scale(1.1);
+  box-shadow: 0 0 6px var(--golden-text);
 }
 
-.navbar-toggler:focus {
-  box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.5) !important;
-}
-
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23d4af37' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-}
-
-/* ============================ */
-/* 6. قائمة الموبايل (Offcanvas) */
-/* ============================ */
+/* الموبايل */
 .offcanvas {
-  background-color: var(--primary-bg) !important;
+  background-color: #03138a;
   border-left: 3px solid var(--golden-text);
+  transition: transform 0.3s ease-in-out;
 }
 
 .offcanvas-header {
   border-bottom: 2px solid rgba(212, 175, 55, 0.3);
-  padding: 1.5rem;
-}
-
-.offcanvas-title {
-  color: var(--golden-text) !important;
-  font-weight: bold;
-  font-size: 1.3rem;
-}
-
-.offcanvas-body {
-  padding: 1.5rem 1rem;
-}
-
-.btn-close {
-  filter: brightness(0) saturate(100%) invert(72%) sepia(52%) saturate(489%) hue-rotate(5deg) brightness(94%) contrast(86%);
-  opacity: 1;
-}
-
-.btn-close:hover {
-  opacity: 0.8;
-  transform: rotate(90deg);
-  transition: all 0.3s ease;
-}
-
-/* ============================ */
-/* 7. روابط القائمة في الموبايل */
-/* ============================ */
-.offcanvas .nav-link {
-  color: var(--golden-text) !important;
-  padding: 0.8rem 1rem !important;
-  margin: 0.3rem 0;
-  border-radius: 6px;
-  display: block;
-  font-size: 1.05rem;
 }
 
 .offcanvas .nav-link:hover {
-  background-color: var(--hover-bg) !important;
-  color: #fff !important;
-  padding-left: 1.5rem !important;
-  transition: all 0.3s ease;
-}
-
-.offcanvas .nav-link.active {
-  background-color: var(--active-bg) !important;
-  color: var(--golden-text) !important;
-  font-weight: 400;
-  border-left: 4px solid var(--golden-text);
-}
-
-/* ============================ */
-/* 8. تحسينات للأزرار (Buttons) */
-/* ============================ */
-.btn-primary {
   background-color: var(--golden-text) !important;
-  border-color: var(--golden-text) !important;
   color: var(--primary-bg) !important;
-  font-weight: 500;
-  padding: 0.6rem 1.5rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-  background-color: #f5d76e !important;
-  border-color: #f5d76e !important;
-  color: var(--primary-bg) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
-}
-
-.btn-primary:active,
-.btn-primary:focus {
-  background-color: #c19b2e !important;
-  border-color: #c19b2e !important;
-  box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.5) !important;
-}
-
-/* ============================ */
-/* 9. تأثيرات إضافية للـ Navigation Items */
-/* ============================ */
-.nav-item {
-  position: relative;
-}
-
-.nav-link.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60%;
-  height: 3px;
-  background-color: var(--golden-text);
-  border-radius: 2px;
-}
-
-/* ============================ */
-/* 10. Responsive Adjustments */
-/* ============================ */
-@media (max-width: 991px) {
-  .navbar-brand {
-    font-size: 1.2rem;
-  }
-
-  .navbar {
-    min-height: 60px;
-  }
-}
-
-/* ============================ */
-/* 11. Animation للقائمة */
-/* ============================ */
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.offcanvas .nav-item {
-  animation: slideIn 0.3s ease forwards;
-}
-
-.offcanvas .nav-item:nth-child(1) { animation-delay: 0.1s; }
-.offcanvas .nav-item:nth-child(2) { animation-delay: 0.2s; }
-.offcanvas .nav-item:nth-child(3) { animation-delay: 0.3s; }
-.offcanvas .nav-item:nth-child(4) { animation-delay: 0.4s; }
-.offcanvas .nav-item:nth-child(5) { animation-delay: 0.5s; }
-
-/* ============================ */
-/* 12. تحسين Cursor للعناصر التفاعلية */
-/* ============================ */
-.nav-link,
-.navbar-brand,
-.navbar-toggler {
-  cursor: pointer;
-}
-/* Hover effect للرابط الحالي في Angular */
-.active-hover {
-  background-color: var(--hover-bg) !important;
-  color: #fff !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
-}
-
-/* لتوافق مع offcanvas */
-.offcanvas .active-hover {
   padding-left: 1.5rem !important;
+}
+
+/* زر الموبايل */
+.navbar-toggler {
+  border-color: var(--golden-text) !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23d4af37' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* تباعد أسفل النافبار */
+body {
+  padding-top: 110px !important;
+}
+
+/* استجابة للموبايل */
+@media (max-width: 991px) {
+  .bottom-nav {
+    display: none;
+  }
+
+  .nav-item {
+    color: var(--golden-text);
+  }
+
+  body {
+    padding-top: 70px !important;
+  }
 }

@@ -19,6 +19,7 @@ import { AsiaComponent } from './components/Pages/clieant-feeds/asia/asia.compon
 import { MiddleEastComponent } from './components/Pages/clieant-feeds/middleeast/middleeast.component';
 import { EuropeComponent } from './components/Pages/clieant-feeds/europe/europe.component';
 import { AfricaComponent } from './components/Pages/clieant-feeds/africa/africa.component';
+import { MyProfileComponent } from './components/Pages/Admin-feeds/myprofile/myprofile.component';
 
 export const routes: Routes = [
   {
@@ -34,8 +35,13 @@ export const routes: Routes = [
       { path: 'europe', component: EuropeComponent},
       { path: 'africa', component: AfricaComponent},
       { path: 'About-US', component: AboutPageComponent },
+
+      { path: 'myprofile', component: MyProfileComponent },
+
       { path: 'Login', component: LoginComponent },
       { path: 'SignUp', component: SignupComponent },
+
+
       { path: '', redirectTo: '/home', pathMatch: 'full' },
     ]
   },
