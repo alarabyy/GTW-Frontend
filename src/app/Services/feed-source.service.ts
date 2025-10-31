@@ -16,9 +16,8 @@ export class FeedSourceService {
     return this.http.get(`${this.baseUrl}/get`);
   }
 
-  /** ✅ Add new feed source */
+  /** ✅ Create new feed source */
   create(data: any): Observable<any> {
-    // ال endpoint الصحيح هو /create
     return this.http.post(`${this.baseUrl}/create`, data);
   }
 

@@ -65,6 +65,6 @@ export class GlobalNavComponent implements OnInit {
   }
 
   goToProfile() {
-    this.router.navigate(['/myprofile']);
+    this.router.navigate(['/MyProfileUser']);
   }
 }

@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FeedService } from '../../../../Services/feed.service';
+import { CommonModule } from '@angular/common';
 import { NewsDetailsComponent } from '../news-details/news-details.component';
 
 @Component({
-  selector: 'app-americas',
+  selector: 'app-oceania',
   standalone: true,
   imports: [CommonModule, NewsDetailsComponent],
-  templateUrl: './americas.component.html',
-  styleUrls: ['./americas.component.css']
+  templateUrl: './oceania.component.html',
+  styleUrl: './oceania.component.css'
 })
-export class AmericasComponent implements OnInit {
-  feeds: any[] = [];
+export class OceaniaComponent {
+feeds: any[] = [];
   selectedFeed: any = null; // الخبر المختار
   currentPage = 1;
   pageSize = 9;
-  categoryId = 1; // رقم الكاتيجوري لأمريكا حسب API
+  categoryId = 5; // رقم الكاتيجوري لأمريكا حسب API
 
   constructor(private feedService: FeedService) {}
 

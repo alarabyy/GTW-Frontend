@@ -20,7 +20,6 @@
   justify-content: center;
 }
 
-/* ===== FEED CARD ===== */
 .feed-card {
   position: relative;
   background: rgba(255, 255, 255, 0.08);
@@ -85,7 +84,6 @@
   margin-top: 10px;
 }
 
-/* ===== Pagination ===== */
 .pagination {
   margin-top: 50px;
   display: flex;
@@ -115,17 +113,31 @@
   color: #002b66;
 }
 
-/* ===== Animations ===== */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== Responsive ===== */
 @media (max-width: 992px) {
   .feed-cards { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 640px) {
   .feed-cards { grid-template-columns: 1fr; }
+}
+.details-btn {
+  margin-top: 15px;
+  padding: 8px 18px;
+  background: #ffd700;
+  color: #002b66;
+  font-weight: bold;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.details-btn:hover {
+  background: #fff;
+  color: #002b66;
 }

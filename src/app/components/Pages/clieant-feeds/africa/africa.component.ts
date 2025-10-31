@@ -1,18 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FeedService } from '../../../../Services/feed.service';
+import { NewsDetailsComponent } from '../news-details/news-details.component';
 
 @Component({
   selector: 'app-africa',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NewsDetailsComponent],
   templateUrl: './africa.component.html',
   styleUrls: ['./africa.component.css']
 })
 export class AfricaComponent implements OnInit {
-  feeds: any[] = [];
+feeds: any[] = [];
+  selectedFeed: any = null; // الخبر المختار
   currentPage = 1;
   pageSize = 9;
+  categoryId = 0; // رقم الكاتيجوري لأمريكا حسب API
 
   constructor(private feedService: FeedService) {}
 
@@ -21,7 +24,7 @@ export class AfricaComponent implements OnInit {
   }
 
   loadFeeds(): void {
-    this.feedService.getFeedsByCategory('Africa').subscribe({
+    this.feedService.getFeedsByCategory(this.categoryId).subscribe({
       next: (data: any[]) => this.feeds = data,
       error: (err) => console.error(err)
     });
@@ -32,18 +35,22 @@ export class AfricaComponent implements OnInit {
     return this.feeds.slice(start, start + this.pageSize);
   }
 
-  changePage(page: number) {
-    this.currentPage = page;
-  }
-
   get totalPages(): number[] {
     return Array(Math.ceil(this.feeds.length / this.pageSize))
       .fill(0)
       .map((_, i) => i + 1);
   }
 
-  openNews(feed: any) {
-    if (feed.Link) window.open(feed.Link, '_blank');
-    else console.log('Clicked:', feed);
+  changePage(page: number) {
+    this.currentPage = page;
+  }
+
+  openDetails(feed: any) {
+    this.selectedFeed = feed;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  goBack() {
+    this.selectedFeed = null; // العودة لقائمة الأخبار
   }
 }

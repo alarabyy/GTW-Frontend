@@ -22,7 +22,7 @@
 
   <!-- Feeds Section -->
   <section class="feed-section" id="news-section" *ngFor="let section of sections">
-    <h2 class="section-title">{{ section.category }}</h2>
+    <h2 class="section-title">📰 {{ section.sourceName }}</h2>
 
     <div class="feed-cards">
       <div class="feed-card" *ngFor="let post of section.posts" (click)="openNews(post)">
@@ -30,6 +30,7 @@
         <img [src]="post.imageUrl" alt="{{ post.title }}" class="feed-img" />
         <div class="feed-content">
           <div class="source-info">
+            <!-- <img [src]="post.logoUrl" class="source-logo" /> -->
             <span class="source-name">{{ post.sourceName }}</span>
           </div>
           <h3>{{ post.title }}</h3>

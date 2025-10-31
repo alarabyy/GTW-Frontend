@@ -20,6 +20,8 @@ import { MiddleEastComponent } from './components/Pages/clieant-feeds/middleeast
 import { EuropeComponent } from './components/Pages/clieant-feeds/europe/europe.component';
 import { AfricaComponent } from './components/Pages/clieant-feeds/africa/africa.component';
 import { MyProfileComponent } from './components/Pages/Admin-feeds/myprofile/myprofile.component';
+import { OceaniaComponent } from './components/Pages/clieant-feeds/oceania/oceania.component';
+import { MyProfileUserComponent } from './components/Pages/clieant-feeds/my-profile-user/my-profile-user.component';
 
 export const routes: Routes = [
   {
@@ -34,9 +36,11 @@ export const routes: Routes = [
       { path: 'middleeast', component: MiddleEastComponent },
       { path: 'europe', component: EuropeComponent},
       { path: 'africa', component: AfricaComponent},
+      { path: 'Oceania', component: OceaniaComponent},
       { path: 'About-US', component: AboutPageComponent },
 
-      { path: 'myprofile', component: MyProfileComponent },
+      { path: 'MyProfileUser', component: MyProfileUserComponent },
+
 
       { path: 'Login', component: LoginComponent },
       { path: 'SignUp', component: SignupComponent },
@@ -51,6 +55,7 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: { role: 'Admin' },
     children: [
+      { path: 'myprofile', component: MyProfileComponent },
       { path: 'All-User', component: AllUserComponent },
       { path: 'DashBoard', component: DashboardComponent },
       { path: 'feeds', component: FeedsComponent },

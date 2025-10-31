@@ -15,25 +15,18 @@
 
   <div *ngIf="loading" class="state">Loading feeds…</div>
   <div *ngIf="error" class="state error">{{ error }}</div>
-
   <div *ngIf="!loading && !error && filtered?.length === 0" class="state">No feeds found.</div>
 
   <div class="grid">
     <article *ngFor="let f of filtered | slice:0:displayCount()" class="card">
       <div class="card-media" role="link" tabindex="0" [routerLink]="['/admin/feeds', f.Id]">
-        <img 
-          [src]="getImageUrl(f)" 
-          (error)="onImageError($event)" 
-          alt="{{ f.Title }}" 
-          class="img-fluid rounded shadow-sm w-100"
-        />
+        <img [src]="getImageUrl(f)" (error)="onImageError($event)" alt="{{ f.Title }}" class="img-fluid rounded shadow-sm w-100"/>
       </div>
 
       <div class="card-body">
         <h2 class="card-title">
           <a [routerLink]="['/admin/feeds', f.Id]">{{ f.Title }}</a>
         </h2>
-
         <p class="card-summary">{{ truncate(f.Summary || f.Content, 180) }}</p>
 
         <div class="meta">

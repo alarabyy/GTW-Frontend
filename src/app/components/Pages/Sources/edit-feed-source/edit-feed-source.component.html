@@ -14,16 +14,16 @@
 
     <!-- Edit Form -->
     <form *ngIf="!loading" [formGroup]="form" (ngSubmit)="save()">
-      <!-- Name -->
+      <!-- Category -->
       <div class="mb-3">
-        <label class="form-label fw-semibold">Source Name</label>
-        <input
-          formControlName="name"
-          class="form-control form-control-lg"
-          placeholder="Enter feed source name"
-        />
-        <div *ngIf="form.get('name')?.invalid && form.get('name')?.touched" class="text-danger small mt-1">
-          Source name is required
+        <label class="form-label fw-semibold">Category</label>
+        <select formControlName="category" class="form-select form-select-lg">
+          <option *ngFor="let cat of categories" [ngValue]="cat.value">
+            {{ cat.label }}
+          </option>
+        </select>
+        <div *ngIf="form.get('category')?.invalid && form.get('category')?.touched" class="text-danger small mt-1">
+          Category is required
         </div>
       </div>
 

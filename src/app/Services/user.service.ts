@@ -14,6 +14,12 @@ export interface UserResponse {
   pageCount: number;
 }
 
+export interface ProfileResponse {
+  success: boolean;
+  content: User;
+  message: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -43,12 +49,24 @@ export class UserService {
 
     return this.http.get(`${this.baseUrl}/user/${id}`, { headers });
   }
-  
-updateUser(id: number, payload: { name: string; email: string }) {
-  const token = localStorage.getItem('auth_token') ?? sessionStorage.getItem('auth_token');
-  const headers = { 'Authorization': `Bearer ${token}`, 'accept': 'application/json', 'Content-Type': 'application/json' };
-  return this.http.put(`${this.baseUrl}/user/${id}`, payload, { headers });
-}
+
+  // 🟡 NEW: Get current user profile
+  getProfile(): Observable<ProfileResponse> {
+    const token = localStorage.getItem('auth_token') ?? sessionStorage.getItem('auth_token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'accept': 'application/json'
+    });
+
+    return this.http.get<ProfileResponse>(`${this.baseUrl}/user/profile`, { headers });
+  }
+
+  // 🔴 Update user by id
+  updateUser(id: number, payload: { name: string; email: string }) {
+    const token = localStorage.getItem('auth_token') ?? sessionStorage.getItem('auth_token');
+    const headers = { 'Authorization': `Bearer ${token}`, 'accept': 'application/json', 'Content-Type': 'application/json' };
+    return this.http.put(`${this.baseUrl}/user/${id}`, payload, { headers });
+  }
 
   // 🔴 Delete user by id
   deleteUser(id: number): Observable<any> {

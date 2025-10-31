@@ -151,7 +151,7 @@ export class MyProfileComponent implements OnInit {
 
       const body = {
         email,
-        token, // أو ممكن يكون token خاص بالباسورد إذا موجود
+        token, 
         password: this.passwordForm.get('password')!.value
       };
 

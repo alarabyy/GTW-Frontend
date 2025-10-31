@@ -26,7 +26,7 @@ export class FeedSourcesComponent implements OnInit {
   loadSources() {
     this.service.getAll().subscribe({
       next: (res) => {
-        this.sources = res.content ?? []; // لأن الAPI بيرجع { success, content, message }
+        this.sources = res.content ?? [];
         this.loading = false;
       },
       error: (err) => {
@@ -41,5 +41,11 @@ export class FeedSourcesComponent implements OnInit {
     if (confirm('Are you sure you want to delete this source?')) {
       this.service.delete(id).subscribe(() => this.loadSources());
     }
+  }
+
+  /** 🌍 ترجمة الكاتيجوري */
+  getCategoryName(category: number): string {
+    const categories = ['Africa', 'Americas', 'Asia', 'Europe', 'Middle East', 'Oceania', 'World'];
+    return categories[category] ?? 'Unknown';
   }
 }

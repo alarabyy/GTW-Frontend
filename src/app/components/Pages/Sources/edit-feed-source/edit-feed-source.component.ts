@@ -17,6 +17,16 @@ export class EditFeedSourceComponent implements OnInit {
   loading = true;
   saving = false;
 
+  categories = [
+    { value: 0, label: 'Africa' },
+    { value: 1, label: 'Americas' },
+    { value: 2, label: 'Asia' },
+    { value: 3, label: 'Europe' },
+    { value: 4, label: 'Middle East' },
+    { value: 5, label: 'Oceania' },
+    { value: 6, label: 'World' }
+  ];
+
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -27,20 +37,24 @@ export class EditFeedSourceComponent implements OnInit {
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.paramMap.get('id'));
     this.form = this.fb.group({
-      name: ['', Validators.required],
+      category: [0, Validators.required],
       url: ['', Validators.required]
     });
 
     this.loadSource();
   }
 
-  /** ✅ تحميل البيانات من الـ API */
   loadSource() {
     this.service.getAll().subscribe({
       next: (res) => {
-        const sources = res.content || []; // 👈 تعديل هنا
+        const sources = res.content || [];
         const source = sources.find((s: any) => s.id === this.id);
-        if (source) this.form.patchValue(source);
+        if (source) {
+          this.form.patchValue({
+            category: source.category,
+            url: source.url
+          });
+        }
         this.loading = false;
       },
       error: (err) => {
@@ -50,12 +64,17 @@ export class EditFeedSourceComponent implements OnInit {
     });
   }
 
-  /** 💾 حفظ التعديلات */
   save() {
     if (this.form.invalid) return;
-
     this.saving = true;
-    this.service.update(this.id, this.form.value).subscribe({
+
+    // ✅ تأكد أن category رقم وليس نص
+    const payload = {
+      ...this.form.value,
+      category: Number(this.form.value.category)
+    };
+
+    this.service.update(this.id, payload).subscribe({
       next: () => {
         this.saving = false;
         alert('✅ Source updated successfully!');
@@ -64,7 +83,7 @@ export class EditFeedSourceComponent implements OnInit {
       error: (err) => {
         this.saving = false;
         console.error(err);
-        alert('❌ Failed to update source');
+        alert('❌ Failed to update source: ' + (err.error?.message || 'Unknown error'));
       }
     });
   }
